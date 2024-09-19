@@ -1,0 +1,31 @@
+import { config } from "dotenv";
+
+config();
+
+const PORT = process.env.PORT;
+const MONGODB_URI = process.env.MONGODB_CONNECTION_STRING;
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN_SECRET;
+const CLOUD_NAME = process.env.CLOUDINARY_NAME;
+const CLOUD_API_KEY = process.env.CLOUDINARY_API_KEY;
+const CLOUD_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+const DEFAULT_IMAGE = process.env.CLOUDINARY_DEFAULT_IMAGE;
+const EMAIL_HOST = process.env.EMAIL_HOST_NAME;
+const EMAIL_PORT = process.env.EMAIL_HOST_PORT;
+const EMAIL_NAME = process.env.EMAIL_USER_NAME;
+const EMAIL_PASSWORD = process.env.EMAIL_USER_PASSWORD;
+
+export {
+  PORT,
+  MONGODB_URI,
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
+  CLOUD_NAME,
+  CLOUD_API_KEY,
+  CLOUD_API_SECRET,
+  DEFAULT_IMAGE,
+  EMAIL_HOST,
+  EMAIL_PORT,
+  EMAIL_NAME,
+  EMAIL_PASSWORD,
+};
