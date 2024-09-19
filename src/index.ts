@@ -27,6 +27,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Vercel's serverless function export
-export default (req: VercelRequest, res: VercelResponse) => {
-  app(req, res);
-};
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
