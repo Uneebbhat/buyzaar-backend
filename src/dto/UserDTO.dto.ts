@@ -6,12 +6,14 @@ class UserDTO {
   email: string;
   profilePic: string;
   role: string;
+  phoneNumber: number;
   constructor(user: User) {
     this._id = user._id;
     this.name = user.name;
     this.email = user.email;
     this.profilePic = user.profilePic;
     this.role = user.role;
+    this.phoneNumber = user.phoneNumber;
   }
 }
 

@@ -45,7 +45,7 @@ const userModel = new Schema<User>(
     },
     phoneNumber: {
       type: Number,
-      unique: true,
+      default: null,
     },
   },
   {
