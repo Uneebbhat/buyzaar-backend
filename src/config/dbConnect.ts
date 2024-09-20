@@ -3,10 +3,13 @@ import { MONGODB_URI } from "./constants";
 
 const dbConnect = async () => {
   try {
-    const conn = await mongoose.connect(MONGODB_URI as string);
+    const conn = await mongoose.connect(MONGODB_URI as string, {
+      serverSelectionTimeoutMS: 30000,
+      connectTimeoutMS: 30000,
+    });
     console.log(`Database connected: ${conn.connection.host}`);
   } catch (e: any) {
-    console.log(`Error connecting to database: ${e.message}`);
+    console.error(`Error connecting to database: ${e.message}`);
   }
 };
 
