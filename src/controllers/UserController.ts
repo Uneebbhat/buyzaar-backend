@@ -7,6 +7,8 @@ import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken";
 import LoginSchema from "../schemas/LoginSchema";
 import UserDTO from "../dto/UserDTO.dto";
+import { DEFAULT_IMAGE } from "../config/constants";
+import cloudinaryUpload from "../utils/cloudinaryUpload";
 
 export const signup = async (
   req: Request,
@@ -36,8 +38,21 @@ export const signup = async (
     }
 
     const hashPass = await bcrypt.hash(password, 10);
+    let profilePicUrl = DEFAULT_IMAGE;
+
+    if (req.file) {
+      try {
+        const profilePic = await cloudinaryUpload(req.file.path, {
+          folder: "buynex/profile_pic",
+        });
+        profilePicUrl = profilePic.secure_url;
+      } catch (error: any) {
+        return ErrorHandler.send(res, 500, error.message);
+      }
+    }
 
     const user = await User.create({
+      profilePic: profilePicUrl,
       name,
       email,
       password: hashPass,

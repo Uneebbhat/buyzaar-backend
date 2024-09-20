@@ -14,6 +14,7 @@ dbConnect();
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api", signupRoute);
