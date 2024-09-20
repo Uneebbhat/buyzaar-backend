@@ -6,7 +6,7 @@ class UserDTO {
   email: string;
   profilePic: string;
   role: string;
-  phoneNumber: number;
+  phoneNumber: string;
   constructor(user: User) {
     this._id = user._id;
     this.name = user.name;

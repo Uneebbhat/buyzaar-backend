@@ -11,7 +11,7 @@ interface User extends Document {
   password: string;
   profilePic: string;
   role: Role;
-  phoneNumber: number;
+  phoneNumber: string;
 }
 
 const userModel = new Schema<User>(
@@ -44,8 +44,9 @@ const userModel = new Schema<User>(
       default: Role.Buyer,
     },
     phoneNumber: {
-      type: Number,
-      default: null,
+      type: String,
+      default: "",
+      // unique: true,
     },
   },
   {

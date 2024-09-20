@@ -18,12 +18,21 @@ export const signup = async (
   if (error) {
     return next(error);
   }
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, phoneNumber } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return ErrorHandler.send(res, 400, "User already exists");
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail) {
+      return ErrorHandler.send(res, 400, "User already exists with this email");
+    }
+
+    const existingUserByPhone = await User.findOne({ phoneNumber });
+    if (phoneNumber && existingUserByPhone) {
+      return ErrorHandler.send(
+        res,
+        400,
+        "User already exists with this phone number"
+      );
     }
 
     const hashPass = await bcrypt.hash(password, 10);
@@ -33,9 +42,15 @@ export const signup = async (
       email,
       password: hashPass,
       role,
+      phoneNumber,
     });
+
     if (!user) {
-      return ErrorHandler.send(res, 400, "An error occured");
+      return ErrorHandler.send(
+        res,
+        400,
+        "An error occurred while creating the account"
+      );
     }
 
     const { accessToken, refreshToken } = await generateToken(user);
