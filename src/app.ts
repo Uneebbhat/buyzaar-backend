@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dbConnect from "./config/dbConnect";
 import signupRoute from "./routes/User.routes";
+import uploadProductRoute from "./routes/UploadProduct.routes";
 import errorHandler from "./middlewares/errorHandler";
 
 const app: Application = express();
@@ -17,7 +18,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/api", signupRoute);
+app.use("/api", signupRoute, uploadProductRoute);
 app.use(errorHandler);
 
 // Default route
