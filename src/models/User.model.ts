@@ -14,7 +14,7 @@ interface User extends Document {
   phoneNumber: string;
 }
 
-const userModel = new Schema<User>(
+const userModel: Schema<User> = new Schema(
   {
     name: {
       type: String,
@@ -54,6 +54,8 @@ const userModel = new Schema<User>(
   }
 );
 
-const User = mongoose.model<User>("User", userModel);
+const User =
+  (mongoose.models.User as mongoose.Model<User>) ||
+  mongoose.model<User>("User", userModel);
 
 export default User;
