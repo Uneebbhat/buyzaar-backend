@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { uploadProduct } from "../controllers/UploadProduct";
-import multer from "multer"
+import multer from "multer";
 
-const upload = multer({dest: "/uploads"})
+const upload = multer({ dest: "uploads" });
 
 const router = Router();
 
-router.post("/upload-product", uploadProduct, upload.array(String(5)));
+router.post("/upload-product", upload.array("images", 10), uploadProduct);
 
 export default router;

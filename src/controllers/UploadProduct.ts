@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import UploadProductSchema from "../schemas/UploadProductSchema";
 import UploadProduct from "../models/UploadProduct.model";
 import cloudinaryUpload from "../utils/cloudinaryUpload";
+import ResponseHandler from "../utils/ResponseHandler";
+import ErrorHandler from "../utils/ErrorHandler";
 
 export const uploadProduct = async (
   req: Request,
@@ -22,24 +24,31 @@ export const uploadProduct = async (
       });
     }
 
-    const { images, ...productDetails } = value;
+    console.log("Files received:", req.files);
+    const files = req.files as Express.Multer.File[];
+
+    if (!files || files.length < 1) {
+      return ErrorHandler.send(res, 400, "At least one image is required.");
+    }
+
+    if (files.length > 10) {
+      return ErrorHandler.send(
+        res,
+        400,
+        "You can upload a maximum of 10 images."
+      );
+    }
+
     const imageUrls: string[] = [];
 
-    if (images && images.length > 10) {
-      return res.status(400).json({
-        status: "error",
-        message: "You can upload a maximum of 10 images.",
+    for (const file of files) {
+      const uploadedImage = await cloudinaryUpload(file.path, {
+        folder: "buyzaar/product_images",
       });
+      imageUrls.push(uploadedImage.secure_url);
     }
 
-    if (images && images.length > 0) {
-      for (const image of images) {
-        const uploadedImage = await cloudinaryUpload(image.path, {
-          folder: "buynex/product_images",
-        });
-        imageUrls.push(uploadedImage.secure_url);
-      }
-    }
+    const { images, ...productDetails } = value;
 
     const newProduct = new UploadProduct({
       ...productDetails,
@@ -47,14 +56,18 @@ export const uploadProduct = async (
     });
 
     const savedProduct = await newProduct.save();
+    const productDetailsObject = savedProduct.toObject();
 
-    res.status(201).json({
-      status: "success",
-      message: "Product uploaded successfully.",
-      data: savedProduct,
-    });
+    console.log("Saved Product:", productDetailsObject);
+
+    return ResponseHandler.send(
+      res,
+      201,
+      "Product uploaded successfully.",
+      productDetailsObject
+    );
   } catch (err) {
     console.error("Upload Product Error:", err);
-    next(err);
+    return ErrorHandler.send(res, 500, "Internal Server Error");
   }
 };

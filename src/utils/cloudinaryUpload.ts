@@ -1,4 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
+import cloudinaryConfig from "../config/cloudinaryConfig";
+
+cloudinaryConfig();
 
 const cloudinaryUpload = async (filepath: string, options = {}) => {
   try {
