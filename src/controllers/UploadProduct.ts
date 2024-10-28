@@ -49,22 +49,29 @@ export const uploadProduct = async (
     }
 
     const { images, ...productDetails } = value;
+    const { details } = req.body || {};
+    console.log(`Details: ${details}`);
 
-    const newProduct = new UploadProduct({
-      ...productDetails,
-      images: imageUrls,
+    const testProduct = new UploadProduct({
+      category: "Gadgets",
+      subcategory: "Mobile Devices",
+      details: {
+        color: "Black",
+        warranty: "1 Year",
+        images: ["https://sample.url/image.png"],
+      }, // Test sample data
     });
 
-    const savedProduct = await newProduct.save();
-    const productDetailsObject = savedProduct.toObject();
+    const savedProduct = await testProduct.save();
+    console.log(savedProduct);
 
-    console.log("Saved Product:", productDetailsObject);
+    // console.log("Saved Product:", productDetailsObject);
 
     return ResponseHandler.send(
       res,
       201,
       "Product uploaded successfully.",
-      productDetailsObject
+      testProduct
     );
   } catch (err) {
     console.error("Upload Product Error:", err);

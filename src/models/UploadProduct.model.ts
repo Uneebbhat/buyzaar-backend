@@ -14,7 +14,12 @@ export enum Category {
 }
 
 export const Subcategories: { [key in Category]?: string[] } = {
-  [Category.Bikes]: ["Road Bike", "Mountain Bike", "Hybrid Bike", "Electric Bike"],
+  [Category.Bikes]: [
+    "Road Bike",
+    "Mountain Bike",
+    "Hybrid Bike",
+    "Electric Bike",
+  ],
   [Category.Gadgets]: [
     "Computers & Laptops",
     "Mobile Devices",
@@ -43,33 +48,35 @@ interface UploadProducts extends Document {
 }
 
 const uploadProductModel: Schema<UploadProducts> = new Schema(
-    {
-      category: {
-        type: String,
-        enum: Object.values(Category),
-        required: true,
-      },
-      subcategory: {
-        type: String,
-        required: true,
-        validate: {
-          validator: function (value: string) {
-            const category = (this as UploadProducts).category;
-            return Subcategories[category]?.includes(value) ?? false;
-          },
-          message: (props) => `${props.value} is not a valid subcategory for the selected category.`,
+  {
+    category: {
+      type: String,
+      enum: Object.values(Category),
+      required: true,
+    },
+    subcategory: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (value: string) {
+          const category = (this as UploadProducts).category;
+          return Subcategories[category]?.includes(value) ?? false;
         },
-      },
-      details: {
-        type: Schema.Types.Mixed,
-        default: {},
+        message: (props) =>
+          `${props.value} is not a valid subcategory for the selected category.`,
       },
     },
-    { timestamps: true }
+    details: {
+      type: Schema.Types.Mixed,
+      default: null,
+      required: true,
+    },
+  },
+  { timestamps: true }
 );
 
 const UploadProduct: Model<UploadProducts> =
-    mongoose.models.UploadProducts ||
-    mongoose.model<UploadProducts>("UploadProducts", uploadProductModel);
+  mongoose.models.UploadProducts ||
+  mongoose.model<UploadProducts>("UploadProducts", uploadProductModel);
 
 export default UploadProduct;
